@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../report/report_page.dart';
 import '../home/homepage.dart';
 import '../register/register_page.dart';
 
@@ -37,6 +38,9 @@ class MyDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.show_chart),
             title: Text('Report', style: Theme.of(context).textTheme.button.copyWith(color: Colors.grey),),
+            onTap: (){
+              Navigator.of(context).pushReplacementNamed(ReportPage.ROUTE_NAME);
+            },
           ),
           Divider(endIndent: 50.0, indent: 10.0,),
         ],

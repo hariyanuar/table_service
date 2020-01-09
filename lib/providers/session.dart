@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import 'auth.dart';
 import 'food.dart';
 import 'order.dart';
+import 'transaction_point.dart';
 import 'transaction.dart' as TransactionModel;
 
 class Session with ChangeNotifier {
@@ -16,6 +18,7 @@ class Session with ChangeNotifier {
   List<Food> _foods = [];
   List<Order> _orders = [];
   List<TransactionModel.Transaction> _transactions = new List<TransactionModel.Transaction>();
+  List<TransactionPoint> _transactionPoints = [];
 
   Future<void> fetchFoodsData() async {
     await database.collection('menus').getDocuments().then((documents) {
@@ -66,26 +69,47 @@ class Session with ChangeNotifier {
   }
 
   Future<List<TransactionModel.Transaction>> fetchTransactionsData() async {
-    final transactions = await database.collection('transactions').getDocuments();
+    final transactionSnapshot = await database.collection('transactions').getDocuments();
     final orders = await database.collection('orders').getDocuments();
 
     String uid;
 
     _transactions.clear();
 
-    transactions.documents.forEach((transaction){
-      uid = orders.documents.firstWhere((order) => order.documentID == transaction.data['orderid']).data['uid'];
+    print('transactions.documents: ${transactionSnapshot.documents.length}');
+
+    transactionSnapshot.documents.forEach((tx){
+      uid = orders.documents.firstWhere((order) => order.documentID == tx.data['orderid']).data['uid'];
+
+      print (tx.data['orderdate'].toDate());
 
       _transactions.add(TransactionModel.Transaction(
         uid: uid,
-        id: transaction.documentID,
-        orderdate: transaction.data['orderdate'].toDate(),
-        orderid: transaction.data['orderid'],
-        totalpayment: transaction.data['totalpayment']
+        id: tx.documentID,
+        orderdate: tx.data['orderdate'].toDate(),
+        orderid: tx.data['orderid'],
+        totalpayment: tx.data['totalpayment']
       ));
     });
 
+    print('transactions: ${_transactions.length}');
+
     return _transactions;
+  }
+  
+  Future<List<TransactionPoint>> fetchTransactionsReportData (BuildContext ctx) async {
+    final transactions = await database.collection('transactions').where('orderdate', isGreaterThanOrEqualTo: Timestamp.fromDate(DateTime.now().subtract(Duration(days: 30)))).getDocuments();
+
+    _transactionPoints.clear();
+    transactions.documents.forEach((transaction){
+      _transactionPoints.add(TransactionPoint(
+        income: transaction.data['totalpayment'],
+        date: transaction.data['orderdate'].toDate(),
+        barColor: charts.ColorUtil.fromDartColor(Theme.of(ctx).primaryColor),
+      ));
+    });
+
+    return _transactionPoints;
   }
 
   get getTransactions {
