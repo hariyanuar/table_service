@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           FoodsPage(),
           OrdersPage(),
-          TransactionsPage(),
+          Center(child: Text('Transactions Page'),),
         ],
       ),
     );

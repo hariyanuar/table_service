@@ -36,51 +36,34 @@ class Session with ChangeNotifier {
     return [..._foods];
   }
 
-  Future<void> fetchOrdersData() async {
+  Future<List<Order>> fetchOrdersData () async {
+    final documents = await database.collection('orders').getDocuments();
+
+    final users = await database.collection('users').getDocuments();
+
+    String buyerName;
+
     _orders.clear();
-    await database.collection('orders').getDocuments().then((documents) async {
-      documents.documents.forEach((order) {
-        database
-            .collection('users')
-            .document(order.data['uid'])
-            .get()
-            .then((user) {
-          _orders.add(Order(
-            id: order.documentID,
-            tableNumber: order.data['tablenumber'],
-            orderDate: (order.data['orderdate'] as Timestamp).toDate(),
-            status: order.data['status'],
-            note: order.data['note'],
-            uid: order.data['uid'],
-            name: user.data['user_name'],
-          ));
-        });
-      });
+    documents.documents.forEach((documentSnapshot){
+      buyerName = users.documents.firstWhere((user) => user.documentID == documentSnapshot.data['uid']).data['user_name'];
+
+      _orders.add(Order(
+        id: documentSnapshot.documentID,
+        note: documentSnapshot.data['note'],
+        orderDate: documentSnapshot.data['orderdate'].toDate(),
+        status: documentSnapshot.data['status'],
+        tableNumber: documentSnapshot.data['tablenumber'],
+        uid: documentSnapshot.data['uid'],
+        name: buyerName,
+      ));
     });
-    notifyListeners();
+
+    print(_orders.length);
+    return _orders;
   }
 
   get getOrders {
     return [..._orders];
-  }
-
-  Future<void> fetchTransactionsData() async {
-    _transactions.clear();
-    await database
-        .collection('transactions')
-        .getDocuments()
-        .then((documents) async {
-      documents.documents.forEach((snapshot) {
-        _transactions.add(TransactionModel.Transaction(
-          id: snapshot.documentID,
-          uid: snapshot.data['uid'],
-          orderid: snapshot.data['orderid'],
-          orderdate: snapshot.data['orderdate'].toDate(),
-          totalpayment: snapshot.data['totalpayment']
-        ));
-      });
-    });
-    notifyListeners();
   }
 
   get getTransactions {
