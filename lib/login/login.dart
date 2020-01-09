@@ -16,6 +16,8 @@ class Login extends StatelessWidget {
 }
 
 class LoginBody extends StatefulWidget {
+  bool isLoading = false;
+
   @override
   _LoginBodyState createState() => _LoginBodyState();
 }
@@ -26,9 +28,10 @@ class _LoginBodyState extends State<LoginBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(50.0),
+    return widget.isLoading ? Center(child: Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center,children: <Widget>[CircularProgressIndicator(), Text('Wait for a moment')],)) : SingleChildScrollView(
+      child: Container(
+        height: MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top,
+        padding: EdgeInsets.all(50.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -48,8 +51,11 @@ class _LoginBodyState extends State<LoginBody> {
             SizedBox(height: MediaQuery.of(context).size.height * 0.025),
             CustomRaisedButton(
               onPressed: () {
-                final session = Provider.of<Session>(context, listen: false);
+                setState(() {
+                  widget.isLoading = true;
+                });
 
+                final session = Provider.of<Session>(context, listen: false);
                 session.auth
                     .signIn(_emailController.text, _passwordController.text)
                     .then((uid) {
@@ -63,6 +69,9 @@ class _LoginBodyState extends State<LoginBody> {
                 })
                     .catchError((err) {
                   Scaffold.of(context).showSnackBar(SnackBar(content: Text(err.message)));
+                  setState(() {
+                    widget.isLoading = false;
+                  });
                 });
               },
               child: Text(

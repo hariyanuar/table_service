@@ -15,7 +15,7 @@ class Session with ChangeNotifier {
 
   List<Food> _foods = [];
   List<Order> _orders = [];
-  List<TransactionModel.Transaction> _transactions = [];
+  List<TransactionModel.Transaction> _transactions = new List<TransactionModel.Transaction>();
 
   Future<void> fetchFoodsData() async {
     await database.collection('menus').getDocuments().then((documents) {
@@ -58,12 +58,34 @@ class Session with ChangeNotifier {
       ));
     });
 
-    print(_orders.length);
     return _orders;
   }
 
   get getOrders {
     return [..._orders];
+  }
+
+  Future<List<TransactionModel.Transaction>> fetchTransactionsData() async {
+    final transactions = await database.collection('transactions').getDocuments();
+    final orders = await database.collection('orders').getDocuments();
+
+    String uid;
+
+    _transactions.clear();
+
+    transactions.documents.forEach((transaction){
+      uid = orders.documents.firstWhere((order) => order.documentID == transaction.data['orderid']).data['uid'];
+
+      _transactions.add(TransactionModel.Transaction(
+        uid: uid,
+        id: transaction.documentID,
+        orderdate: transaction.data['orderdate'].toDate(),
+        orderid: transaction.data['orderid'],
+        totalpayment: transaction.data['totalpayment']
+      ));
+    });
+
+    return _transactions;
   }
 
   get getTransactions {

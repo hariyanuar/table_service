@@ -24,22 +24,37 @@ class _OrdersPageState extends State<OrdersPage> {
             child: CircularProgressIndicator(),
           );
         else if (snapshot.hasData) {
-          return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1,
+          return Scaffold(
+            floatingActionButton: session.privilege == 'Administrator' ||
+                    session.privilege == 'Waiter' ||
+                    session.privilege == 'Customer'
+                ? FloatingActionButton(
+                    onPressed: () {},
+                    heroTag: 'OrdersPageFAB',
+                  )
+                : null,
+            body: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1,
+              ),
+              itemCount: _orders.length,
+              itemBuilder: (ctx, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Card(
+                    child: GridTile(
+                      child: Icon(Icons.library_books, size: 100.0, color: Colors.grey,),
+                      footer: GridTileBar(
+                        backgroundColor: Colors.black54,
+                        title: Text(_orders[index].id),
+                        subtitle: Text('Order by ${_orders[index].name}'),
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
-            itemCount: _orders.length,
-            itemBuilder: (ctx, index){
-              return GridTile(
-                child: Icon(Icons.library_books),
-                footer: GridTileBar(
-                  backgroundColor: Colors.black54,
-                  title: Text(_orders[index].id),
-                  subtitle: Text('Order by ${_orders[index].name}'),
-                ),
-              );
-            },
           );
         } else {
           return Center(child: Text(snapshot.error.toString()));
