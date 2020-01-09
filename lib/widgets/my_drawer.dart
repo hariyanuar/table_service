@@ -10,13 +10,14 @@ class MyDrawer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Container(
-            alignment: Alignment.centerLeft,
-            color: Theme.of(context).primaryColor,
-            child: DrawerHeader(
-              child: Text('Welcome to Table Service App', style: Theme.of(context).textTheme.title,),
+          DrawerHeader(
+            padding: EdgeInsets.all(50.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
             ),
+            child: Center(child: Text('Welcome to Table Service App', style: Theme.of(context).textTheme.title,)),
           ),
+          Divider(endIndent: 10.0, indent: 10.0, thickness: 1.5,),
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home', style: Theme.of(context).textTheme.button.copyWith(color: Colors.grey),),

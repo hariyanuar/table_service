@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
       create: (ctx) => Session(),
       child: MaterialApp(
         theme: ThemeData(
-          primaryColor: Color.fromRGBO(247, 183, 49,1.0),
-          accentColor: Color.fromRGBO(254, 211, 48,1.0),
+          primaryColor: Color.fromRGBO(68, 189, 50,1.0),
+          accentColor: Color.fromRGBO(76, 209, 55,1.0),
           textTheme: TextTheme(
             button: TextStyle(
               fontSize: 20.0,

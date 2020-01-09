@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.library_books),
-            title: Text('Order'),
+            title: Text('Orders'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.attach_money),
