@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:table_service/home/food_detail_page.dart';
 
 import '../providers/food.dart';
 import '../providers/session.dart';
@@ -49,13 +50,18 @@ class _FoodsPageState extends State<FoodsPage> {
               itemBuilder: (ctx, i){
                 return Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Card(
-                    child: GridTile(
-                      child: Icon(Icons.fastfood, size: 100.0, color: Colors.grey),
-                      footer: GridTileBar(
-                        backgroundColor: Colors.black54,
-                        title: Text(_foods[i].name, textAlign: TextAlign.center),
-                        subtitle: Text(NumberFormat.currency(locale: 'ID').format(_foods[i].price), textAlign: TextAlign.center,),
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.of(context).pushNamed(FoodDetailPage.ROUTE_NAME, arguments: _foods[i].id);
+                    },
+                    child: Card(
+                      child: GridTile(
+                        child: Icon(Icons.fastfood, size: 100.0, color: Colors.grey),
+                        footer: GridTileBar(
+                          backgroundColor: Colors.black54,
+                          title: Text(_foods[i].name, textAlign: TextAlign.center),
+                          subtitle: Text(NumberFormat.currency(locale: 'ID').format(_foods[i].price), textAlign: TextAlign.center,),
+                        ),
                       ),
                     ),
                   ),

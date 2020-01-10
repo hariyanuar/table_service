@@ -76,12 +76,8 @@ class Session with ChangeNotifier {
 
     _transactions.clear();
 
-    print('transactions.documents: ${transactionSnapshot.documents.length}');
-
     transactionSnapshot.documents.forEach((tx){
       uid = orders.documents.firstWhere((order) => order.documentID == tx.data['orderid']).data['uid'];
-
-      print (tx.data['orderdate'].toDate());
 
       _transactions.add(TransactionModel.Transaction(
         uid: uid,
@@ -92,9 +88,11 @@ class Session with ChangeNotifier {
       ));
     });
 
-    print('transactions: ${_transactions.length}');
-
     return _transactions;
+  }
+
+  get getTransactions {
+    return [..._transactions];
   }
   
   Future<List<TransactionPoint>> fetchTransactionsReportData (BuildContext ctx) async {
@@ -110,9 +108,5 @@ class Session with ChangeNotifier {
     });
 
     return _transactionPoints;
-  }
-
-  get getTransactions {
-    return [..._transactions];
   }
 }

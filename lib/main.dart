@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'home/food_detail_page.dart';
 import 'report/report_page.dart';
 import 'register/register_page.dart';
 import 'providers/session.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           HomePage.ROUTE_NAME: (ctx) => HomePage(),
           RegisterPage.ROUTE_NAME: (ctx) => RegisterPage(),
           ReportPage.ROUTE_NAME: (ctx) => ReportPage(),
+          FoodDetailPage.ROUTE_NAME: (ctx) => FoodDetailPage(),
         },
       ),
     );
