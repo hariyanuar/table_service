@@ -18,7 +18,6 @@ class MyDrawer extends StatelessWidget {
             ),
             child: Center(child: Text('Welcome to Table Service App', style: Theme.of(context).textTheme.title,)),
           ),
-          Divider(endIndent: 10.0, indent: 10.0, thickness: 1.5,),
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home', style: Theme.of(context).textTheme.button.copyWith(color: Colors.grey),),
@@ -26,7 +25,6 @@ class MyDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(HomePage.ROUTE_NAME);
             },
           ),
-          Divider(endIndent: 50.0, indent: 10.0,),
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Register User', style: Theme.of(context).textTheme.button.copyWith(color: Colors.grey),),
@@ -34,7 +32,6 @@ class MyDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(RegisterPage.ROUTE_NAME);
             },
           ),
-          Divider(endIndent: 50.0, indent: 10.0,),
           ListTile(
             leading: Icon(Icons.show_chart),
             title: Text('Report', style: Theme.of(context).textTheme.button.copyWith(color: Colors.grey),),
@@ -42,7 +39,7 @@ class MyDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(ReportPage.ROUTE_NAME);
             },
           ),
-          Divider(endIndent: 50.0, indent: 10.0,),
+          Divider(thickness: 1.5,),
         ],
       ),
     );
